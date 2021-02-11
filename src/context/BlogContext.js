@@ -9,7 +9,8 @@ const blogReducer = (state, action) => {
         ...state,
         {
           id: Math.floor(Math.random() * 99999),
-          title: `Blog Post #${state.length + 1}`,
+          title: action.payload.title,
+          content: action.payload.content,
         },
       ]; //updates state with new post in array
     default:
@@ -18,8 +19,8 @@ const blogReducer = (state, action) => {
 };
 
 const addBlogPost = (dispatch) => {
-  return () => {
-    dispatch({ type: 'add_blog_post' }); // calls on the action from reducer
+  return (title, content) => {
+    dispatch({ type: 'add_blog_post', payload: { title, content } }); // calls on the action from reducer
   };
 };
 
