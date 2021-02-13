@@ -11,15 +11,6 @@ const blogReducer = (state, action) => {
       });
     case 'delete_blog_post':
       return state.filter((blogPost) => blogPost.id !== action.payload);
-    case 'add_blog_post':
-      return [
-        ...state,
-        {
-          id: Math.floor(Math.random() * 99999),
-          title: action.payload.title,
-          content: action.payload.content,
-        },
-      ]; //updates state with new post in array
     default:
       return state;
   }
@@ -36,7 +27,6 @@ const getBlogPosts = (dispatch) => {
 const addBlogPost = (dispatch) => {
   return async (title, content, callback) => {
     await jsonServer.post('/blogposts', { title, content });
-    // dispatch({ type: 'add_blog_post', payload: { title, content } }); // calls on the action from reducer
     if (callback) {
       callback();
     }
@@ -53,7 +43,8 @@ const editBlogPost = (dispatch) => {
 };
 
 const deleteBlogPost = (dispatch) => {
-  return (id) => {
+  return async (id) => {
+    await jsonServer.delete(`/blogposts${id}`);
     dispatch({ type: 'delete_blog_post', payload: id });
   };
 };
